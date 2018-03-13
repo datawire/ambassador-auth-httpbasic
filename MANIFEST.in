@@ -1,0 +1,2 @@
+include versioneer.py
+include ambassador_auth/_version.py

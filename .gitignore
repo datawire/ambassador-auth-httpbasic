@@ -1,0 +1,19 @@
+# --- IntelliJ IDEA ---
+.idea
+*.iml
+out
+
+# --- Python ---
+*.egg-info
+*.pyc
+__pycache__
+venv
+virtualenv
+
+# --- PyInstaller ---
+dist
+build
+*.spec
+
+# --- Kubernetes ---
+.kube

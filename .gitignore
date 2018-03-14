@@ -17,3 +17,6 @@ build
 
 # --- Kubernetes ---
 .kube
+
+# --- Forge ---
+.forge

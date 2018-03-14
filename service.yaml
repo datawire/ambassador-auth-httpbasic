@@ -1,0 +1,14 @@
+---
+name: ambassador-auth
+namespace: default
+replicas: 1
+
+profiles:
+  dev:
+    name: {{ branch.replace('/', '-') }}
+  stable:
+    name: stable
+
+branches:
+  master: stable
+  dev/*:  dev

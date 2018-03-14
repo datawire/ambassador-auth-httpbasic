@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ build.name }}
+  namespace: {{ service.namespace | default("default") }}
+spec:
+  replicas: {{ service.replicas | default(1) }}
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: {{ build.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ build.name }}
+    spec:
+      containers:
+        - name: ambassador-auth-basicauth
+          image: {{ build.images["Dockerfile"] }}
+          ports:
+            - name: http-api
+              containerPort: 5000
+          volumeMounts:
+            - name: users
+              mountPath: /var/lib/ambassador/auth-basicauth
+              readOnly: true
+      volumes:
+        - name: users
+          secret:
+            secretName: {{ build.name }}-users
+            items:
+              - key: users.yaml
+                path: users.yaml

@@ -17,5 +17,5 @@
 admin:
   hashed_password: "$2b$12$2uSUm0tOHR.6.otAic0zZuHNLjH2TJ5fymD3GwDgEGJx6Mfqbcn/u"
 
-regular_user:
+foobar:
   hashed_password: "$2b$12$BfyGWJEVpybci4ze7tpKuuWxlJ/aS1sFqQwuuxMC/X0ey9YkHxnr."

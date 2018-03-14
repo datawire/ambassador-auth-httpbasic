@@ -88,6 +88,11 @@ def not_found(e):
     return Response(status=404)
 
 
+@app.route("/readyz", methods=["GET"])
+def readyz():
+    return "OK", 200
+
+
 @app.route("/healthz", methods=["GET"])
 def healthz():
     return "OK", 200

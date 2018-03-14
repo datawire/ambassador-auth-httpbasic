@@ -8,6 +8,7 @@ from werkzeug.routing import Rule
 import bcrypt
 import logging
 import sys
+import threading
 import yaml
 
 
@@ -22,19 +23,28 @@ app = Flask(__name__)
 app.url_map.add(Rule("/extauth", strict_slashes=False, endpoint="handle_authorization", defaults={"path": ""}))
 app.url_map.add(Rule("/extauth/<path:path>", endpoint="handle_authorization"))
 
+users = {}
 
-def load_users(path):
+
+def load_users():
+    p = Path("/var/lib/ambassador/auth-basicauth/users.yaml")
+    logger.debug("Loading users from file: %s", p)
+
+    th = threading.Timer(5.0, load_users)
+    th.daemon = True
+    th.start()
+
     result = {}
-
-    if not path.exists():
-        logger.warning("Users file not found at expected path: %s", path)
+    if not p.exists():
+        logger.warning("Users file not found at expected path: %s", p)
     else:
-        result = yaml.load(path.read_text(encoding="UTF-8"))
+        result = yaml.load(p.read_text(encoding="UTF-8"))
 
-    return result
+    global users
+    users = result
 
 
-users = load_users(Path("/var/lib/ambassador/auth-basicauth/users.yaml"))
+load_users()
 
 
 def check_auth(username, password):

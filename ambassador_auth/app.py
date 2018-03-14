@@ -1,5 +1,5 @@
 from base64 import b64encode
-from flask import Flask, request, redirect, jsonify, Response
+from flask import Flask, request, Response
 from functools import wraps
 from pathlib import Path
 from hashlib import sha256
@@ -7,41 +7,48 @@ from werkzeug.routing import Rule
 
 import bcrypt
 import logging
-import sys
+import os
 import threading
 import yaml
 
 
-logging.basicConfig(stream=sys.stdout, level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
 app = Flask(__name__)
 
-# Specify the extauth route here because Flask requires manual specification of all the HTTP methods on the @app.route
+# Specify the /extauth route here because Flask requires manual specification of all the HTTP methods on the @app.route
 # decorator which is tedious and prone to break in practice from new or custom HTTP methods being introduced.
 app.url_map.add(Rule("/extauth", strict_slashes=False, endpoint="handle_authorization", defaults={"path": ""}))
 app.url_map.add(Rule("/extauth/<path:path>", endpoint="handle_authorization"))
 
 users = {}
+users_last_modified_time = 0
 
 
 def load_users():
-    p = Path("/var/lib/ambassador/auth-basicauth/users.yaml")
-    logger.debug("Loading users from file: %s", p)
+    global users, users_last_modified_time
+
+    users_file = Path("/var/lib/ambassador/auth-basicauth/users.yaml")
+    try:
+        modified_time = os.stat(str(users_file), follow_symlinks=True).st_mtime_ns
+        if modified_time > users_last_modified_time:
+            app.logger.info("Started loading users file from filesystem")
+            modified_users = yaml.load(users_file.read_text(encoding="UTF-8"))
+
+            users = modified_users
+            users_last_modified_time = modified_time
+
+            app.logger.info("Completed loading users file from filesystem")
+        else:
+            app.logger.info(
+                "Skipped loading users file from filesystem because modified time is same (old: %s, latest: %s)",
+                users_last_modified_time, modified_time)
+    except FileNotFoundError:
+        app.logger.exception("Failed loading users file because the file was not found: %s", users_file)
+    except yaml.YAMLError as e:
+        app.logger.exception("Failed loading users file because the YAML is invalid")
 
     th = threading.Timer(5.0, load_users)
     th.daemon = True
     th.start()
-
-    result = {}
-    if not p.exists():
-        logger.warning("Users file not found at expected path: %s", p)
-    else:
-        result = yaml.load(p.read_text(encoding="UTF-8"))
-
-    global users
-    users = result
 
 
 load_users()
@@ -102,3 +109,11 @@ def healthz():
 @requires_auth
 def handle_authorization(path):
     return Response(status=200)
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000, debug=True)
+else:
+    gunicorn_logger = logging.getLogger("gunicorn.error")
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)

@@ -1,0 +1,18 @@
+---
+# users.yaml
+#
+# The format of this file is: ${username: String} -> ${user_data: UserData}"
+#
+# Currently there is only a single field on the UserData object: "hashed_password". The value of "hashed_password" is
+# a bcrypt hashed base64 encoded sha256 of a users raw password. This is done to allow passwords of length greater than
+# 72 characters which is a limitation of the bcrypt algorithm.
+#
+# Programmatically:
+#
+#   password = "IAmTheWalrus"
+#   prepared_password = b64encode(sha256(password.encode("UTF-8")).digest())
+#   hashed_password = bcrypt.hashpw(prepared_password, bcrypt.gensalt())
+#
+
+admin:
+  hashed_password: "$2b$12$2uSUm0tOHR.6.otAic0zZuHNLjH2TJ5fymD3GwDgEGJx6Mfqbcn/u"

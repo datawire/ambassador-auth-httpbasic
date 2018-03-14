@@ -1,9 +1,21 @@
+from base64 import b64encode
 from flask import Flask, request, redirect, jsonify, Response
 from functools import wraps
+from pathlib import Path
+from hashlib import sha256
 from werkzeug.routing import Rule
 
-app = Flask(__name__)
+import bcrypt
+import logging
+import sys
+import yaml
 
+
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+
+app = Flask(__name__)
 
 # Specify the extauth route here because Flask requires manual specification of all the HTTP methods on the @app.route
 # decorator which is tedious and prone to break in practice from new or custom HTTP methods being introduced.
@@ -11,8 +23,32 @@ app.url_map.add(Rule("/extauth", strict_slashes=False, endpoint="handle_authoriz
 app.url_map.add(Rule("/extauth/<path:path>", endpoint="handle_authorization"))
 
 
+def load_users(path):
+    result = {}
+
+    if not path.exists():
+        logger.warning("Users file not found at expected path: %s", path)
+    else:
+        result = yaml.load(path.read_text(encoding="UTF-8"))
+
+    return result
+
+
+users = load_users(Path("/var/lib/ambassador/auth-basicauth/users.yaml"))
+
+
 def check_auth(username, password):
-    return username == "admin" and password == "admin"
+    user_data = users.get(username, None)
+    if user_data:
+        # Passwords in the users database are stored as base64 encoded sha256 to work around the fact bcrypt only
+        # supports a maximum password length of 72 characters (yes that is very long). See the below link for more
+        # detail.
+        #
+        # see "Maximum Password Length" -> https://pypi.python.org/pypi/bcrypt/3.1.0
+        prepared_password = b64encode(sha256(password.encode("UTF-8")).digest())
+        return bcrypt.checkpw(prepared_password, user_data.get("hashed_password", "").encode("UTF-8"))
+    else:
+        return False
 
 
 def unauthorized():

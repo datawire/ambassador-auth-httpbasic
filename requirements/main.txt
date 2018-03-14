@@ -1,2 +1,4 @@
+bcrypt==3.1.0
 flask==0.12.2
 gunicorn==19.7.1
+pyyaml==3.12

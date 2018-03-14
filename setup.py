@@ -9,8 +9,10 @@ setup(
     packages=find_packages(exclude=["tests"]),
     include_package_data=True,
     install_requires=[
+        "bcrypt",
         "flask",
-        "gunicorn"
+        "gunicorn",
+        "pyyaml"
     ],
     author="datawire.io",
     author_email="dev@datawire.io",

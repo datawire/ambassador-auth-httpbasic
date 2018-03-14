@@ -38,7 +38,7 @@ def load_users():
 
             app.logger.info("Completed loading users file from filesystem")
         else:
-            app.logger.info(
+            app.logger.debug(
                 "Skipped loading users file from filesystem because modified time is same (old: %s, latest: %s)",
                 users_last_modified_time, modified_time)
     except FileNotFoundError:

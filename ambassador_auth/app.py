@@ -19,7 +19,7 @@ app = Flask(__name__)
 app.url_map.add(Rule("/extauth", strict_slashes=False, endpoint="handle_authorization", defaults={"path": ""}))
 app.url_map.add(Rule("/extauth/<path:path>", endpoint="handle_authorization"))
 
-users_file = Path(os.getenv("AMBASSADOR_AUTH_USERS_FILE", "/var/lib/ambassador/auth-basicauth/users.yaml"))
+users_file = Path(os.getenv("AMBASSADOR_AUTH_USERS_FILE", "/var/lib/ambassador/auth-httpbasic/users.yaml"))
 users = {}
 users_last_modified_time = 0
 

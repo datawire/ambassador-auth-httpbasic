@@ -1,9 +1,9 @@
 FROM alpine:3.7
 
 MAINTAINER Datawire <dev@datawire.io>
-LABEL PROJECT_REPO_URL         = "git@github.com:datawire/ambassador-auth-basicauth.git" \
-      PROJECT_REPO_BROWSER_URL = "https://github.com/datawire/ambassador-auth-basicauth" \
-      DESCRIPTION              = "Datawire Ambassador Authentication Module (HTTP Basic Authentication)" \
+LABEL PROJECT_REPO_URL         = "git@github.com:datawire/ambassador-auth-httpbasic.git" \
+      PROJECT_REPO_BROWSER_URL = "https://github.com/datawire/ambassador-auth-httpbasic" \
+      DESCRIPTION              = "Datawire Ambassador HTTP Basic Authentication Module (https://getambassador.io)" \
       VENDOR                   = "Datawire, Inc." \
       VENDOR_URL               = "https://datawire.io"
 

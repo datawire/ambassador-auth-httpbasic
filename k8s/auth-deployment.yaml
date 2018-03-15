@@ -24,7 +24,7 @@ spec:
               containerPort: 5000
           volumeMounts:
             - name: users
-              mountPath: /var/lib/ambassador/auth-basicauth
+              mountPath: /var/lib/ambassador/auth-httpbasic
               readOnly: true
       volumes:
         - name: users

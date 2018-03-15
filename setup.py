@@ -3,7 +3,7 @@ import versioneer
 from setuptools import setup, find_packages
 
 setup(
-    name="ambassador-auth-basicauth",
+    name="ambassador-auth-httpbasic",
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     packages=find_packages(exclude=["tests"]),

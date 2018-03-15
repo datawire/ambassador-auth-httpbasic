@@ -1,0 +1,33 @@
+---
+language: python
+sudo: false
+python:
+  - "3.6"
+
+env:
+  global:
+    - PATH=~/bin:${PATH}
+
+install:
+  - pip install -U tox-travis
+
+script:
+  - if [[ "${TRAVIS_TAG}" == "" ]]; then
+      tox -e py36 && ./build.sh;
+    fi
+
+after_script: []
+
+#deploy:
+#  - provider: script
+#    skip_cleanup: true
+#    script: ./publish.sh
+#    on:
+#      tags: false
+#      branch: master
+#  - provider: script
+#    skip_cleanup: true
+#    script: ./release.sh
+#    on:
+#      tags: true
+#      branch: master

@@ -4,12 +4,19 @@ sudo: false
 python:
   - "3.6"
 
+env:
+  global:
+    - secure: "QisIDWCGMNuaqIEJakaduL9Trdia2nh2qIjhlsIoY08eImlHDi3wbergOApzPG6pEFJekn6ipzAnPORzHn1OytwGFegw5CPpZEfNlcxPfYsCnjtz1fJGFuoRDhAH9dF/aIdF6zK9Tn5GErFy1d+FZJAjMTzwZ9r94DKiXM9xFs/CcP9OeCYZLepFXIa8qeqO+GMOFzHTum1YY3BNXS8OD0qpV2c0Iizt5TRPTYCtl7sVjzlkbhu5V2SEMT1jRqMvIadozpm5U5G9fyQFzPRmJ1NUrLLoR3IRU/WZZaYhdY+56D4jJUFfchv0v8zRg8M8qT7UjpCq2rF7PFdD14aYiIBhEuJSUy9olK/kohYw31yj52/mqosPaGP23oqM1M0MGDA/Zvr0SqLsCAym/kVRca+ciKRVk81IgdywJLSJ9gsYOQWCRQAo5syWJlSRW3XPi1DC+Lxkozx11Sv/oCiV3JzX0SWTfMO4KRrySIibCJuFqEejt7aogxKoVjgEXJBO8jeKA5wD0IrPp83qJFd1ru2DrJViL6lY3cNTfMGYQJPEch62zoiyCF/l0FU+ik/hfLkGatBGnRGzIy85ayVZYzjlgBo2SVoGxdCHb9a3k2ZNUVp6n/uqSgbCMDlwu06nkhQ2ra4Sy+2FZvw5S4Diooi15uhTcnEDDUGi5TuSxpE="
+
 install:
   - pip install -U tox-travis
 
+before_script:
+  - docker login -u="datawire+releasebot" -p="${QUAYIO_PASSWORD}"
+
 script:
   - if [[ "${TRAVIS_TAG}" == "" ]]; then
-      tox -e py36 && docker build -t datawire/ambassador-auth-httpbasic .
+      tox -e py36 && docker build -t quay.io/datawire/ambassador-auth-httpbasic:$(git rev-parse --short HEAD) .;
     fi
 
 after_script: []
@@ -17,7 +24,7 @@ after_script: []
 deploy:
   - provider: script
     skip_cleanup: true
-    script: ./publish.sh
+    script: bash -c 'docker push quay.io/datawire/ambassador-auth-httpbasic:$(git rev-parse --short HEAD)'
     on:
       tags: false
       branch: master

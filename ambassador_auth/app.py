@@ -83,7 +83,7 @@ def check_auth(username, password):
 
 
 def unauthorized():
-    return Response(status=401)
+    return Response(status=401, headers={"WWW-Authenticate": 'Basic realm="Authentication Required"'})
 
 
 def requires_auth(f):

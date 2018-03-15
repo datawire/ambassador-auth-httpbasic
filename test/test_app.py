@@ -35,6 +35,8 @@ def test_auth_fails_with_invalid_credentials(client):
 
     r = client.get("/extauth", headers=headers)
     assert 401 == r.status_code
+    assert 'WWW-Authenticate' in r.headers
+    assert 'Basic realm="Authentication Required"' == r.headers["WWW-Authenticate"]
 
 
 def test_auth_succeeds_with_valid_credentials(client):

@@ -10,7 +10,7 @@ spec:
       port: 80
       targetPort: http-api
   selector:
-    app: {{ build.name }}
+    app: ambassador-auth-httpbasic
 
 ---
 apiVersion: v1

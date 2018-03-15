@@ -1,5 +1,7 @@
 # Ambassador Module - HTTP Basic Authentication
 
+[![Build Status](https://travis-ci.org/datawire/ambassador-auth-basicauth.svg?branch=master)](https://travis-ci.org/datawire/ambassador-auth-basicauth)
+
 Generic reusable Ambassador Authentication Module that supports HTTP Basic Authentication and a simple username to password database.
 
 # Using With Ambassador

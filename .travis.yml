@@ -4,27 +4,23 @@ sudo: false
 python:
   - "3.6"
 
-env:
-  global:
-    - PATH=~/bin:${PATH}
-
 install:
   - pip install -U tox-travis
 
 script:
   - if [[ "${TRAVIS_TAG}" == "" ]]; then
-      tox -e py36
+      tox -e py36 && docker build -t datawire/ambassador-auth-httpbasic .
     fi
 
 after_script: []
 
-#deploy:
-#  - provider: script
-#    skip_cleanup: true
-#    script: ./publish.sh
-#    on:
-#      tags: false
-#      branch: master
+deploy:
+  - provider: script
+    skip_cleanup: true
+    script: ./publish.sh
+    on:
+      tags: false
+      branch: master
 #  - provider: script
 #    skip_cleanup: true
 #    script: ./release.sh

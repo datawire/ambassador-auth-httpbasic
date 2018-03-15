@@ -19,6 +19,7 @@ app = Flask(__name__)
 app.url_map.add(Rule("/extauth", strict_slashes=False, endpoint="handle_authorization", defaults={"path": ""}))
 app.url_map.add(Rule("/extauth/<path:path>", endpoint="handle_authorization"))
 
+users_file = Path(os.getenv("AMBASSADOR_AUTH_USERS_FILE", "/var/lib/ambassador/auth-basicauth/users.yaml"))
 users = {}
 users_last_modified_time = 0
 
@@ -26,7 +27,6 @@ users_last_modified_time = 0
 def load_users():
     global users, users_last_modified_time
 
-    users_file = Path("/var/lib/ambassador/auth-basicauth/users.yaml")
     try:
         modified_time = os.stat(str(users_file), follow_symlinks=True).st_mtime_ns
         if modified_time > users_last_modified_time:

@@ -2,6 +2,9 @@ from ambassador_auth import app
 
 from base64 import b64encode
 from hashlib import sha256
+from pathlib import Path
+
+import yaml
 
 
 def test_healthz(client):
@@ -21,7 +24,7 @@ def test_auth_fails_with_invalid_credentials(client):
     assert 401 == r.status_code
 
 
-def test_auth_succeeds_with_invalid_credentials(client):
+def test_auth_succeeds_with_valid_credentials(client):
     app.users = {
         "admin": {
             "hashed_password": create_hashed_password("IAmTheWalrus")
@@ -32,6 +35,25 @@ def test_auth_succeeds_with_invalid_credentials(client):
 
     r = client.get("/extauth", headers=headers)
     assert 200 == r.status_code
+
+
+def test_load_credentials_from_file(tmpdir):
+    p = Path(tmpdir)
+
+    users_file_under_test = p / "users.yaml"
+    users_file_under_test.touch()
+
+    app.users_file = users_file_under_test
+    credentials = {
+        "admin": {"hashed_password": create_hashed_password("IAmTheWalrus")},
+        "user1": {"hashed_password": create_hashed_password("CooCooKaChoo")}
+    }
+
+    users_file_under_test.write_text(yaml.dump(credentials))
+
+    app.load_users()
+    assert "admin" in app.users
+    assert "user1" in app.users
 
 
 def create_basic_auth(username, password):

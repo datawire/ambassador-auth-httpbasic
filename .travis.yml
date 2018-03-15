@@ -13,7 +13,7 @@ install:
 
 script:
   - if [[ "${TRAVIS_TAG}" == "" ]]; then
-      tox -e py36 && ./build.sh;
+      tox -e py36
     fi
 
 after_script: []

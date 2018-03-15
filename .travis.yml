@@ -15,7 +15,7 @@ install:
   - pip install -U tox-travis
 
 before_script:
-  - docker login -u="datawire+releasebot" -p="${QUAYIO_PASSWORD}"
+  - echo ${QUAYIO_PASSWORD} | docker login -u="datawire+releasebot" --password-stdin quay.io
 
 script:
   - if [[ "${TRAVIS_TAG}" == "" ]]; then

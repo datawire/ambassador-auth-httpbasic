@@ -99,36 +99,39 @@ user1:
 
 # Using With Ambassador
 
-To use this authentication module with Ambassador you need to configure Ambassador to be aware of it. The easiest way to do that is to attach it to the annotations on the Kubernetes service that acts as the entrypoint to Ambassador, for example:
+1. Install the Authentication module. A reference install is available in the [`manifests/`](manifests/) directory. It is recommended that you download the manifest into your source repository since you need to manage the Kubernetes secret in order to control who can access your services.
 
-```yaml
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    service: ambassador
-  name: ambassador
-  annotations:
-    getambassador.io/config: |
-      ---
-      apiVersion: ambassador/v0
-      kind: Module
-      name: authentication
-      config:
-        auth_service: "ambassador-auth:80"
-        path_prefix: "/extauth"
-        allowed_headers: []
-        
-spec:
-  type: LoadBalancer
-  ports:
-    - name: ambassador
-      port: 80
-      targetPort: 80
-  selector:
-    service: ambassador
-```
+2. Add one or more users to the users database. Securely managing the users database file is outside scope of this doc. 
+
+3. Configure Ambassador to use the authentication module. The easiest way to do that is to add configuration data to your Ambassador entrypoint service.
+
+    **NOTE** - The below snippet should work with default Ambassador install. If you're using a custom install (e.g different namespace, different service name etc) then you should customize as necessary.
+
+    ```yaml
+    apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        service: ambassador
+      name: ambassador
+    annotations:
+      getambassador.io/config: |
+        apiVersion: ambassador/v0
+        kind: Module
+        name: authentication
+        config:
+          auth_service: "ambassador-auth:80"
+          path_prefix: "/extauth"
+          allowed_headers: []
+    spec:
+      type: NodePort
+      ports:
+        - name: ambassador
+          port: 80
+          targetPort: 80
+      selector:
+        service: ambassador
+    ```
 
 # License
 

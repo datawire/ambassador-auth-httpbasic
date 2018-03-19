@@ -16,8 +16,8 @@ setup(
     ],
     author="datawire.io",
     author_email="dev@datawire.io",
-    url="https://github.com/datawire/ambassador-auth-basicauth",
-    download_url="https://github.com/datawire/ambassador-auth-basicauth/tarball/{}".format(versioneer.get_version()),
+    url="https://github.com/datawire/ambassador-auth-httpbasic",
+    download_url="https://github.com/datawire/ambassador-auth-httpbasic/tarball/{}".format(versioneer.get_version()),
     keywords=[
         "authentication",
         "getambassador.io",

@@ -17,7 +17,7 @@ spec:
         app: {{ build.name }}
     spec:
       containers:
-        - name: ambassador-auth-basicauth
+        - name: ambassador-auth-httpbasic
           image: {{ build.images["Dockerfile"] }}
           ports:
             - name: http-api

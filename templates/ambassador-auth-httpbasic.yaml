@@ -39,7 +39,7 @@ spec:
         app: ambassador-auth-httpbasic
     spec:
       containers:
-        - name: ambassador-auth-basicauth
+        - name: ambassador-auth-httpbasic
           image: quay.io/datawire/ambassador-auth-httpbasic:__DOCKER_TAG__
           ports:
             - name: http-api

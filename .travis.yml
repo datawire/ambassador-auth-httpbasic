@@ -31,9 +31,9 @@ deploy:
     on:
       tags: false
       branch: master
-#  - provider: script
-#    skip_cleanup: true
-#    script: ./release.sh
-#    on:
-#      tags: true
-#      branch: master
+  - provider: script
+    skip_cleanup: true
+    script: ./release.sh $TRAVIS_TAG
+    on:
+      tags: true
+      branch: master

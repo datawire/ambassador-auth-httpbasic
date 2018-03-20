@@ -34,9 +34,9 @@ Reusable Ambassador Authentication Module that supports HTTP Basic Authenticatio
    spec:
      type: LoadBalancer
      ports:
-     - name: ambassador
-       port: 80
-       targetPort: 80
+       - name: ambassador
+         port: 80
+         targetPort: 80
      selector:
        service: ambassador
    ```
@@ -55,12 +55,11 @@ Reusable Ambassador Authentication Module that supports HTTP Basic Authenticatio
        getambassador.io/config: |
          ---
          apiVersion: ambassador/v0
-         kind: Module
+         kind: AuthService
          name: authentication
-         config:
-   	auth_service: "ambassador-auth:80"
-           path_prefix: "/extauth"
-           allowed_headers: []
+         auth_service: "ambassador-auth:80"
+         path_prefix: "/extauth"
+         allowed_headers: []
          ---
          apiVersion: ambassador/v0
          kind:  Mapping
@@ -71,9 +70,9 @@ Reusable Ambassador Authentication Module that supports HTTP Basic Authenticatio
    spec:
      type: LoadBalancer
      ports:
-     - name: ambassador
-       port: 80
-       targetPort: 80
+       - name: ambassador
+         port: 80
+         targetPort: 80
      selector:
        service: ambassador
    ```

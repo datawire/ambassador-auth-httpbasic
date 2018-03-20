@@ -161,7 +161,7 @@ user1:
 
 # Manipulating the Users Database
 
-1. You need to install a bcrypt tool or library. I recommend the Python implementation which can be installed with `pip`.
+1. You need to install a bcrypt tool or library. The Python implementation is recommended and can be installed with `pip`.
 
     ```bash
     pip install bcrypt

@@ -12,7 +12,7 @@ Reusable Ambassador Authentication Module that supports HTTP Basic Authenticatio
 
 2. Add the the Authentication service to your Ambassador.
     
-   Given (the original Ambassador service from Getting Started):
+   Given (the original Ambassador service from [Getting Started]((https://www.getambassador.io/user-guide/getting-started)):
    
    ```yaml
    ---
@@ -169,7 +169,7 @@ user1:
 
 ## Add User
 
-1. Prepare the password for bcrypt. In the below example we prepare the password `hunter2`.
+1. Prepare the password for bcrypt. In the below example we prepare the password `hunter2` for use.
 
     ```bash
     export PREPARED_PASSWORD=$(printf "hunter2" | shasum -a 256 | head -c 64 | openssl base64 -A)
@@ -232,42 +232,6 @@ user1:
     ```
     
 4. Propagation of the change to all Pods running the authentication module takes about 30 seconds to a minute.
-
-# Using With Ambassador
-
-1. Install the Authentication module. A reference install is available in the [`manifests/`](manifests/) directory. It is recommended that you download the manifest into your source repository since you need to manage the Kubernetes secret in order to control who can access your services.
-
-2. Add one or more users to the users database. Securely managing the users database file is outside scope of this doc. 
-
-3. Configure Ambassador to use the authentication module. The easiest way to do that is to add configuration data to your Ambassador entrypoint service.
-
-    **NOTE** - The below snippet should work with default Ambassador install. If you're using a custom install (e.g different namespace, different service name etc) then you should customize as necessary.
-
-    ```yaml
-    apiVersion: v1
-    kind: Service
-    metadata:
-      labels:
-        service: ambassador
-      name: ambassador
-    annotations:
-      getambassador.io/config: |
-        apiVersion: ambassador/v0
-        kind: AuthService
-        name: authentication
-        config:
-          auth_service: "ambassador-auth:80"
-          path_prefix: "/extauth"
-          allowed_headers: []
-    spec:
-      type: NodePort
-      ports:
-        - name: ambassador
-          port: 80
-          targetPort: 80
-      selector:
-        service: ambassador
-    ```
 
 # License
 

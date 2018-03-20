@@ -36,13 +36,13 @@ user1:
 1. Prepare the password for bcrypt. In the below example we prepare the password `hunter2`.
 
     ```bash
-    export PREPARED_PASSWORD=$(echo "hunter2" | sha256sum | head -c 64 | openssl base64 -A)
+    export PREPARED_PASSWORD=$(printf "hunter2" | shasum -a 256 | head -c 64 | openssl base64 -A)
     ```
     
 2. Encrypt the prepared password using bcrypt:
 
     ```bash
-    echo "$PREPARED_PASSWORD" | python -c 'import bcrypt, sys; print(bcrypt.hashpw(sys.stdin.read().encode(), bcrypt.gensalt()).decode())'
+    printf "$PREPARED_PASSWORD" | python -c 'import bcrypt, sys; print(bcrypt.hashpw(sys.stdin.read().encode(), bcrypt.gensalt()).decode())'
     ```
 
 3. Add a new entry to your users database.

@@ -117,7 +117,7 @@ user1:
     annotations:
       getambassador.io/config: |
         apiVersion: ambassador/v0
-        kind: Module
+        kind: AuthService
         name: authentication
         config:
           auth_service: "ambassador-auth:80"

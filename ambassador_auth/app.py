@@ -65,9 +65,6 @@ def load_users():
     th.start()
 
 
-load_users()
-
-
 def check_auth(username, password):
     user_data = users.get(username, None)
     if user_data:
@@ -76,7 +73,9 @@ def check_auth(username, password):
         # detail.
         #
         # see "Maximum Password Length" -> https://pypi.python.org/pypi/bcrypt/3.1.0
-        prepared_password = b64encode(sha256(password.encode("UTF-8")).digest())
+        sha256_password = sha256(password.encode("UTF-8")).hexdigest().encode("UTF-8")
+        prepared_password = b64encode(sha256_password)
+
         return bcrypt.checkpw(prepared_password, user_data.get("hashed_password", "").encode("UTF-8"))
     else:
         return False
@@ -126,15 +125,13 @@ def handle_authorization(path):
 
 
 @app.before_first_request
-def setup_logging():
+def setup():
     if not app.debug:
         app.logger.addHandler(logging.StreamHandler())
         app.logger.setLevel(logging.INFO)
 
+    load_users()
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-# else:
-#     gunicorn_logger = logging.getLogger("gunicorn.error")
-#     app.logger.handlers = gunicorn_logger.handlers
-#     app.logger.setLevel(gunicorn_logger.level)

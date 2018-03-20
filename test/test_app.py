@@ -78,5 +78,5 @@ def create_basic_auth(username, password):
 def create_hashed_password(password):
     import bcrypt
 
-    prepared_password = b64encode(sha256(password.encode("UTF-8")).digest())
+    prepared_password = b64encode(sha256(password.encode("UTF-8")).hexdigest().encode("UTF-8"))
     return bcrypt.hashpw(prepared_password, bcrypt.gensalt()).decode("utf-8")

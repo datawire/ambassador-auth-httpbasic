@@ -116,7 +116,7 @@ Reusable Ambassador Authentication Module that supports HTTP Basic Authenticatio
 6. Attempt to reach one of your services with authentication:
 
     ```bash
-    curl -v http://__EXTERNAL_IP_VALUE__/qotm/
+    curl -v -u admin:admin http://__EXTERNAL_IP_VALUE__/qotm/
  
     > GET /qotm/ HTTP/1.1
     > Host: __EXTERNAL_IP_VALUE__

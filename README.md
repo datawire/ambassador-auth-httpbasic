@@ -12,7 +12,7 @@ Reusable Ambassador Authentication Module that supports HTTP Basic Authenticatio
 
 2. Add the the Authentication service to your Ambassador.
     
-   Given (the original Ambassador service from [Getting Started]((https://www.getambassador.io/user-guide/getting-started)):
+   Given (the original Ambassador service from [Getting Started](https://www.getambassador.io/user-guide/getting-started):
    
    ```yaml
    ---

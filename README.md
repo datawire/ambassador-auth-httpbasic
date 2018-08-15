@@ -219,7 +219,7 @@ user1:
     apiVersion: v1
     kind: Secret
     metadata:
-      name: ambassador-auth-httpbasic-users
+      name: ambassador-auth-httpbasic
     type: Opaque
     data:
       users.yaml: ${BASE64_ENCODED_USERS_DATA}
